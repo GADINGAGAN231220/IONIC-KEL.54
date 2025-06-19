@@ -1,0 +1,90 @@
+/* src/app/profile/profile.page.scss */
+
+// Variabel Warna
+:root {
+  --theme-primary: #9a0002;  // Warna utama (merah marun)
+  --theme-background: #efe6de; // Warna latar belakang (krem)
+  --theme-text: #333;
+  --theme-card-bg: #ffffff;
+}
+
+ion-content {
+  --background: var(--theme-background);
+}
+
+ion-toolbar {
+  --background: var(--theme-primary);
+  --color: white;
+}
+
+.profile-container {
+  padding: 8px;
+}
+
+ion-card {
+  background: var(--theme-card-bg);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin: 0;
+}
+
+ion-card-header {
+  ion-card-title {
+    color: var(--theme-primary);
+    font-size: 1.6em;
+    font-weight: bold;
+  }
+  ion-card-subtitle {
+    font-size: 1em;
+    color: #666;
+  }
+}
+
+ion-list {
+  padding: 0;
+}
+
+ion-item {
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --inner-padding-end: 16px;
+  --background: transparent;
+
+  h2, h3 {
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 4px;
+    font-size: 0.9em;
+    text-transform: uppercase; // Membuat teks header menjadi kapital
+  }
+  
+  p {
+    color: var(--theme-text);
+    font-size: 1em;
+  }
+}
+
+// Styling khusus untuk Karyawan Details
+.karyawan-details {
+  margin-top: 16px;
+  
+  ion-item-divider {
+    --background: var(--theme-background);
+    color: var(--theme-primary);
+    font-weight: bold;
+    font-size: 1.1em;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  ion-item h3 {
+    color: var(--theme-primary);
+  }
+}
+
+ion-button.logout-button {
+  --background: var(--theme-primary);
+  --border-radius: 8px;
+  margin-top: 24px;
+  font-weight: bold;
+}

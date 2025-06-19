@@ -1,0 +1,54 @@
+<!-- src/app/qr-code/qr-code.page.html -->
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>QR Code</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="qr-code-container">
+    <!-- Elemen canvas untuk menggambar QR Code -->
+    <canvas id="qrCodeCanvas"></canvas>
+    <p>Scan QR Code di atas</p>
+  </div>
+</ion-content>
+
+
+
+<style>
+  .qr-code-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 20px;
+    background-color: #f0f2f5; /* Warna latar belakang kontainer */
+  }
+
+  canvas {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 12px; /* Lebih rounded */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* Bayangan lebih dalam */
+    background-color: #ffffff; /* Latar belakang canvas */
+    transition: transform 0.3s ease-in-out; /* Transisi halus saat hover/focus */
+    max-width: 90%; /* Responsive width */
+    height: auto; /* Maintain aspect ratio */
+  }
+
+  canvas:hover {
+    transform: scale(1.02);
+  }
+
+  .qr-code-container p {
+    margin-top: 30px; /* Jarak lebih besar */
+    font-size: 1.2em; /* Ukuran font lebih besar */
+    color: #333; /* Warna teks lebih gelap */
+    font-family: 'Inter', sans-serif; /* Menggunakan font Inter */
+    font-weight: 500;
+  }
+</style>

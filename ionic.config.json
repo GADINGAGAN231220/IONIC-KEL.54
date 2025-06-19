@@ -1,0 +1,7 @@
+{
+  "name": "cateringpb",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

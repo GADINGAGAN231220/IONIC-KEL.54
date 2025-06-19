@@ -1,0 +1,82 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Beranda</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div *ngIf="isLoading" class="ion-text-center ion-padding">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Memuat Data Anda...</p>
+  </div>
+
+  <div *ngIf="errorMessage && !isLoading" class="ion-padding">
+    <ion-item lines="none" color="danger">
+      <ion-icon name="cloud-offline-outline" slot="start"></ion-icon>
+      <ion-label class="ion-text-wrap">{{ errorMessage }}</ion-label>
+    </ion-item>
+  </div>
+
+  <div *ngIf="!isLoading && !errorMessage">
+    <ion-card class="welcome-card" *ngIf="karyawan">
+      <ion-card-header>
+        <ion-card-subtitle>Selamat Datang,</ion-card-subtitle>
+        <ion-card-title>{{ karyawan.nama_lengkap }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item lines="none">
+          <ion-icon name="id-card-outline" slot="start" color="medium"></ion-icon>
+          <ion-label>{{ karyawan.nip }}</ion-label>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-icon name="business-outline" slot="start" color="medium"></ion-icon>
+          <ion-label>{{ karyawan.divisi?.nama_divisi || 'Divisi Tidak Ada' }}</ion-label>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Jadwal Makan Hari Ini</ion-card-title>
+        <ion-card-subtitle>{{ today | date: 'fullDate' : '' : 'id' }}</ion-card-subtitle>
+      </ion-card-header>
+
+      <div *ngIf="statusHariIni.sudah_ambil">
+        <ion-item lines="none" color="success">
+          <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+          <ion-label class="ion-text-wrap">
+            Sudah diambil pukul <strong>{{ statusHariIni.waktu_ambil | date: 'HH:mm' }} WIB</strong>
+          </ion-label>
+        </ion-item>
+      </div>
+
+      <div *ngIf="!statusHariIni.sudah_ambil">
+        <ion-item lines="none" color="warning">
+          <ion-icon name="alert-circle-outline" slot="start"></ion-icon>
+          <ion-label>Anda belum mengambil makanan.</ion-label>
+        </ion-item>
+        
+        <ion-button routerLink="/tabs/qr-code" expand="block" class="ion-margin-horizontal">
+            <ion-icon slot="start" name="qr-code-outline"></ion-icon>
+            Tampilkan QR untuk Ambil Makan
+        </ion-button>
+      </div>
+    </ion-card>
+
+    <ion-card>
+      <ion-item lines="none" class="card-item-header">
+        <ion-icon name="restaurant-outline" slot="start" color="primary"></ion-icon>
+        <ion-label>Menu Shift Anda</ion-label>
+      </ion-item>
+      <ion-card-content class="menu-content">
+        <h3 *ngIf="menuHariIni.menu">{{ menuHariIni.menu }}</h3>
+        <p>{{ menuHariIni.catatan || '' }}</p>
+        <p *ngIf="!menuHariIni.menu && !menuHariIni.catatan">Menu tidak tersedia.</p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
