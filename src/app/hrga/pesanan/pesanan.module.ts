@@ -1,6 +1,9 @@
+// src/app/hrga/pesanan/pesanan.module.ts
+
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+// Import ReactiveFormsModule
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
 
 import { IonicModule } from '@ionic/angular';
 
@@ -13,7 +16,8 @@ import { PesananPage } from './pesanan.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    PesananPageRoutingModule
+    PesananPageRoutingModule,
+    ReactiveFormsModule // <-- Tambahkan ini
   ],
   declarations: [PesananPage]
 })

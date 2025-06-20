@@ -1,13 +1,121 @@
-<ion-header [translucent]="true">
+<!-- src/app/hrga/laporan/laporan.page.html -->
+
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Laporan Konsumsi</ion-title>
+  </ion-toolbar>
   <ion-toolbar>
-    <ion-title>laporan</ion-title>
+    <ion-segment [(ngModel)]="segmentValue" (ionChange)="segmentChanged($event)">
+      <ion-segment-button value="harian">
+        <ion-label>Harian</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="bulanan">
+        <ion-label>Bulanan</ion-label>
+      </ion-segment-button>
+    </ion-segment>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">laporan</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div [ngSwitch]="segmentValue">
+    
+    <!-- === BAGIAN LAPORAN HARIAN === -->
+    <div *ngSwitchCase="'harian'">
+      <ion-item>
+        <ion-label>Filter Tanggal</ion-label>
+        <ion-input>
+          <ion-datetime-button datetime="filter-tanggal"></ion-datetime-button>
+        </ion-input>
+        <ion-button fill="clear" (click)="filterTanggal = null; filterChanged()" *ngIf="filterTanggal">
+            <ion-icon name="close-circle" slot="icon-only"></ion-icon>
+        </ion-button>
+      </ion-item>
+      <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+              <ion-datetime id="filter-tanggal" presentation="date" [(ngModel)]="filterTanggal" (ionChange)="filterChanged()"></ion-datetime>
+          </ng-template>
+      </ion-modal>
+
+      <div *ngIf="isLoading" class="ion-text-center ion-padding-top">
+        <ion-spinner></ion-spinner>
+      </div>
+
+      <div *ngIf="!isLoading && !laporanHarian.length" class="ion-text-center ion-padding">
+        <p>Tidak ada data laporan harian untuk filter yang dipilih.</p>
+      </div>
+      
+      <ion-list>
+        <ion-card *ngFor="let laporan of laporanHarian">
+          <ion-card-header>
+            <ion-card-subtitle>{{ laporan.pesanan_makanan.vendor.nama_vendor }} | {{ laporan.tanggal | date: 'fullDate' }}</ion-card-subtitle>
+            <ion-card-title>{{ laporan.shift.nama_shift }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-grid>
+              <ion-row>
+                <ion-col>Dipesan: <strong>{{ laporan.jumlah_pesanan }}</strong></ion-col>
+                <ion-col>Diambil: <strong>{{ laporan.jumlah_diambil }}</strong></ion-col>
+                <ion-col>Sisa: <strong>{{ laporan.sisa_tidak_diambil }}</strong></ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-list>
+    </div>
+
+    <!-- === BAGIAN LAPORAN BULANAN === -->
+    <div *ngSwitchCase="'bulanan'">
+      <ion-item>
+        <ion-label>Filter Bulan & Tahun</ion-label>
+        <ion-input>
+          <ion-datetime-button datetime="filter-bulan-tahun"></ion-datetime-button>
+        </ion-input>
+         <ion-button fill="clear" (click)="filterBulanTahun = null; filterChanged()" *ngIf="filterBulanTahun">
+            <ion-icon name="close-circle" slot="icon-only"></ion-icon>
+        </ion-button>
+      </ion-item>
+      <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+              <ion-datetime id="filter-bulan-tahun" presentation="month-year" [(ngModel)]="filterBulanTahun" (ionChange)="filterChanged()"></ion-datetime>
+          </ng-template>
+      </ion-modal>
+
+      <div *ngIf="isLoading" class="ion-text-center ion-padding-top">
+        <ion-spinner></ion-spinner>
+      </div>
+
+      <div *ngIf="!isLoading && !laporanBulanan.length" class="ion-text-center ion-padding">
+        <p>Tidak ada data laporan bulanan untuk filter yang dipilih.</p>
+      </div>
+
+      <ion-list>
+        <ion-card *ngFor="let laporan of laporanBulanan">
+          <ion-card-header>
+            <ion-card-subtitle>{{ laporan.vendor.nama_vendor }}</ion-card-subtitle>
+            <ion-card-title>Laporan Bulan {{ laporan.bulan | monthName }} {{ laporan.tahun }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <p>Total Dipesan: <strong>{{ laporan.total_porsi_dipesan }} porsi</strong></p>
+            <p>Total Diambil: <strong>{{ laporan.total_porsi_terdistribusi }} porsi</strong></p>
+            <p>Total Sisa: <strong>{{ laporan.total_sisa_porsi }} porsi</strong></p>
+            <ion-item lines="none" class="ion-no-padding">
+              <ion-label>Total Biaya</ion-label>
+              <ion-chip slot="end" color="success">
+                <ion-label><strong>{{ laporan.total_biaya | currency:'IDR':'symbol':'1.0-0' }}</strong></ion-label>
+              </ion-chip>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+      </ion-list>
+    </div>
+  </div>
+
+  <ion-infinite-scroll (ionInfinite)="loadData(false, $event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Memuat data selanjutnya..."></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>
+  

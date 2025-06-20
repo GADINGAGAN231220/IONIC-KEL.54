@@ -1,6 +1,8 @@
+// src/app/hrga/validasi-fisik/validasi-fisik.module.ts
+
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'; // <-- Tambahkan ReactiveFormsModule
 
 import { IonicModule } from '@ionic/angular';
 
@@ -13,7 +15,8 @@ import { ValidasiFisikPage } from './validasi-fisik.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    ValidasiFisikPageRoutingModule
+    ValidasiFisikPageRoutingModule,
+    ReactiveFormsModule // <-- Tambahkan ini
   ],
   declarations: [ValidasiFisikPage]
 })

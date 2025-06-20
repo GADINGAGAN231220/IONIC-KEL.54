@@ -1,13 +1,79 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>dashboard</ion-title>
+    <ion-title>Dashboard HRGA</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="loadDashboardData()">
+        <ion-icon slot="icon-only" name="refresh-outline"></ion-icon>
+      </ion-button>
+      <!-- Tombol Logout -->
+      <ion-button (click)="logout()" color="danger">
+        <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">dashboard</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="lines"
+      refreshingSpinner="crescent"
+      style="--color: var(--ion-color-primary)">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <div *ngIf="isLoading" class="ion-text-center ion-padding-top">
+    <ion-spinner></ion-spinner>
+    <p>Memuat data...</p>
+  </div>
+
+  <div *ngIf="errorMessage && !isLoading" class="error-message">
+    <ion-icon name="warning-outline"></ion-icon>
+    <p>{{ errorMessage }}</p>
+    <ion-button (click)="loadDashboardData()" fill="solid" color="primary">
+      Coba Lagi
+    </ion-button>
+  </div>
+
+  <div *ngIf="dashboardData && !isLoading" class="ion-padding">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" size-md="4">
+          <ion-card class="dashboard-card">
+            <ion-card-header class="ion-text-center">
+              <div class="card-icon-container">
+                <ion-icon name="people-outline"></ion-icon>
+              </div>
+              <ion-card-title>{{ dashboardData.total_karyawan_aktif }}</ion-card-title>
+              <ion-card-subtitle>Total Karyawan Aktif</ion-card-subtitle>
+            </ion-card-header>
+          </ion-card>
+        </ion-col>
+
+        <ion-col size="12" size-md="4">
+          <ion-card class="dashboard-card">
+            <ion-card-header class="ion-text-center">
+              <div class="card-icon-container">
+                <ion-icon name="business-outline"></ion-icon>
+              </div>
+              <ion-card-title>{{ dashboardData.total_vendor_aktif }}</ion-card-title>
+              <ion-card-subtitle>Total Vendor Aktif</ion-card-subtitle>
+            </ion-card-header>
+          </ion-card>
+        </ion-col>
+
+        <ion-col size="12" size-md="4">
+          <ion-card class="dashboard-card">
+            <ion-card-header class="ion-text-center">
+              <div class="card-icon-container">
+                <ion-icon name="restaurant-outline"></ion-icon>
+              </div>
+              <ion-card-title>{{ dashboardData.pesanan_hari_ini }}</ion-card-title>
+              <ion-card-subtitle>Pesanan Hari Ini</ion-card-subtitle>
+            </ion-card-header>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 </ion-content>

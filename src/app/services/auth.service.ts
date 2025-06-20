@@ -32,7 +32,9 @@ export class AuthService {
   }
 
   async getToken(): Promise<string | null> {
-    await this.init();
+    // Tambahkan 'await this.init()' untuk memastikan 
+    // proses load token dari storage selesai sebelum melanjutkan.
+    await this.init(); 
     return this._token;
   }
 

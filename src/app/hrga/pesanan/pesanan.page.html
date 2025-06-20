@@ -1,13 +1,127 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>pesanan</ion-title>
+    <ion-title>Input Pesanan Makanan</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="loadInitialData()">
+        <ion-icon slot="icon-only" name="refresh-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content>
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">pesanan</ion-title>
+      <ion-title size="large">Input Pesanan</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="ion-text-center ion-padding-top">
+    <ion-spinner></ion-spinner>
+    <p>Memuat data form...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="errorMessage && !isLoading" class="error-message">
+    <ion-icon name="cloud-offline-outline"></ion-icon>
+    <p>{{ errorMessage }}</p>
+    <ion-button (click)="loadInitialData()" fill="solid" color="primary">
+      Coba Lagi
+    </ion-button>
+  </div>
+
+  <!-- Form -->
+  <form [formGroup]="pesananForm" (ngSubmit)="submitPesanan()" *ngIf="!isLoading && !errorMessage">
+    <ion-list class="form-container">
+      <!-- Vendor Selection -->
+      <ion-item class="form-item">
+        <ion-label position="stacked">Pilih Vendor <ion-text color="danger">*</ion-text></ion-label>
+        <ion-select 
+          formControlName="vendor_id" 
+          interface="action-sheet" 
+          placeholder="Pilih vendor"
+          class="custom-select">
+          <ion-select-option *ngFor="let vendor of vendors" [value]="vendor.id">
+            {{ vendor.nama_vendor }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <!-- Shift Selection -->
+      <ion-item class="form-item">
+        <ion-label position="stacked">Pilih Shift <ion-text color="danger">*</ion-text></ion-label>
+        <ion-select 
+          formControlName="shift_id" 
+          interface="action-sheet" 
+          placeholder="Pilih shift"
+          class="custom-select">
+          <ion-select-option *ngFor="let shift of shifts" [value]="shift.id">
+            {{ shift.nama_shift }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <!-- Order Date -->
+      <ion-item class="form-item">
+        <ion-label position="stacked">Tanggal Pesanan <ion-text color="danger">*</ion-text></ion-label>
+        <ion-input>
+          <ion-datetime-button datetime="tanggal_pesanan"></ion-datetime-button>
+        </ion-input>
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime 
+              id="tanggal_pesanan" 
+              displayFormat="YYYY-MM-DD" 
+              presentation="date" 
+              formControlName="tanggal_pesanan" 
+              [min]="today">
+            </ion-datetime>
+          </ng-template>
+        </ion-modal>
+      </ion-item>
+
+      <!-- Quantity -->
+      <ion-item class="form-item">
+        <ion-label position="stacked">Jumlah Pesanan (Porsi) <ion-text color="danger">*</ion-text></ion-label>
+        <ion-input 
+          formControlName="jumlah_porsi_dipesan" 
+          type="number" 
+          min="1" 
+          placeholder="Contoh: 150">
+        </ion-input>
+      </ion-item>
+
+      <!-- Menu -->
+      <ion-item class="form-item">
+        <ion-label position="stacked">Menu Makanan <ion-text color="danger">*</ion-text></ion-label>
+        <ion-input 
+          formControlName="menu" 
+          type="text" 
+          placeholder="Contoh: Nasi, Ayam Goreng, Sayur...">
+        </ion-input>
+      </ion-item>
+
+      <!-- Notes -->
+      <ion-item class="form-item">
+        <ion-label position="stacked">Keterangan (Opsional)</ion-label>
+        <ion-textarea 
+          formControlName="keterangan" 
+          placeholder="Contoh: Tidak terlalu pedas"
+          rows="3">
+        </ion-textarea>
+      </ion-item>
+    </ion-list>
+
+    <div class="ion-padding submit-container">
+      <ion-button 
+        type="submit" 
+        expand="block" 
+        [disabled]="pesananForm.invalid"
+        class="submit-button">
+        <ion-icon slot="start" name="paper-plane-outline"></ion-icon>
+        Kirim Pesanan
+      </ion-button>
+    </div>
+  </form>
 </ion-content>
