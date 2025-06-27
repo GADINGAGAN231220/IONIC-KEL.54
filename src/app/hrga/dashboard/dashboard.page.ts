@@ -122,7 +122,7 @@ export class DashboardPage implements OnInit {
       await toast.present();
 
       // Redirect ke halaman login
-      this.router.navigate(['/login'], { replaceUrl: true });
+      this.router.navigate(['/login-page'], { replaceUrl: true });
       
     } catch (error) {
       console.error('Error during logout:', error);
